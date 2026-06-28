@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.mjs';
 import authRoutes from './routes/authRoutes.mjs';
 import { auth } from './middleware/auth.mjs';
+import videoRoutes from './routes/videoRoutes.mjs';
 
 dotenv.config();
 connectDB();
@@ -16,6 +17,7 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
+app.use('/api/videos', videoRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'YouTube Clone API' });
