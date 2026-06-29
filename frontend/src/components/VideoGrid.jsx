@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
+import LoadingSpinner from './LoadingSpinner'; // import the spinner
 
 function VideoGrid({ search = '', category = 'all' }) {
     const [videos, setVideos] = useState([]);
@@ -22,10 +23,18 @@ function VideoGrid({ search = '', category = 'all' }) {
         fetchVideos();
     }, [search, category]);
 
-    if (loading) return <div>Loading videos...</div>;
+    // If loading, show spinner
+    if (loading) {
+        return <LoadingSpinner />;
+    }
+
+    // If no videos found
+    if (videos.length === 0) {
+        return <p style={{ textAlign: 'center', padding: '2rem' }}>No videos found.</p>;
+    }
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem', padding: '1rem' }}>
             {videos.map(video => (
                 <div key={video._id} style={{ border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
                     <Link to={`/video/${video._id}`}>
@@ -38,7 +47,6 @@ function VideoGrid({ search = '', category = 'all' }) {
                     </div>
                 </div>
             ))}
-            {videos.length === 0 && <p>No videos found.</p>}
         </div>
     );
 }
