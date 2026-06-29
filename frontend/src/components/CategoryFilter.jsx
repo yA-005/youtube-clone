@@ -18,8 +18,13 @@ function CategoryFilter() {
         navigate(`/${query}`);
     };
 
+    // 👇 ADD THIS FUNCTION 👇
+    const clearFilters = () => {
+        navigate('/');
+    };
+
     return (
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', margin: '1rem 0' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', margin: '1rem 0', alignItems: 'center' }}>
             {categories.map(cat => (
                 <button
                     key={cat}
@@ -36,6 +41,20 @@ function CategoryFilter() {
                     {cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </button>
             ))}
+            {/* 👇 ADD THE CLEAR FILTERS BUTTON 👇 */}
+            <button
+                onClick={clearFilters}
+                style={{
+                    padding: '0.5rem 1rem',
+                    backgroundColor: '#dc3545',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '20px',
+                    cursor: 'pointer'
+                }}
+            >
+                Clear Filters
+            </button>
         </div>
     );
 }
