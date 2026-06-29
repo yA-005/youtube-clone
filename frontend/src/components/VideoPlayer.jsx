@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
+import CommentList from './CommentList';  // <-- add this import
 
 function VideoPlayer() {
     const { id } = useParams();
@@ -12,7 +13,7 @@ function VideoPlayer() {
     const [loading, setLoading] = useState(true);
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
-    const [userLike, setUserLike] = useState(null); // 'like', 'dislike', or null
+    const [userLike, setUserLike] = useState(null);
 
     useEffect(() => {
         const fetchVideo = async () => {
@@ -21,7 +22,6 @@ function VideoPlayer() {
                 setVideo(res.data);
                 setLikes(res.data.likes);
                 setDislikes(res.data.dislikes);
-                // For now, we don't track user's like status on load (simplified)
             } catch (err) {
                 console.error(err);
             } finally {
@@ -75,13 +75,17 @@ function VideoPlayer() {
                 </Link>
             </p>
 
-            {/* 👍 Like / Dislike buttons – add them here */}
             <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
                 <button onClick={handleLike}>👍 {likes}</button>
                 <button onClick={handleDislike}>👎 {dislikes}</button>
             </div>
 
             <p>Views: {video.views}</p>
+
+            {/* Add the CommentList component here */}
+            <div style={{ marginTop: '2rem' }}>
+                <CommentList videoId={id} />
+            </div>
         </div>
     );
 }
