@@ -2,24 +2,27 @@
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
-import Home from './components/Home'; 
-import UploadVideo from './components/UploadVideo';
-import VideoGrid from './components/VideoGrid';
 import VideoPlayer from './components/VideoPlayer';
+import ChannelPage from './components/ChannelPage';
+import UploadVideo from './components/UploadVideo';
+import Header from './components/Header';
 
 function App() {
     return (
         <AuthProvider>
             <BrowserRouter>
+                <Header />
                 <Routes>
                     <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/upload" element={<ProtectedRoute><UploadVideo /></ProtectedRoute>} />
-                    <Route path="/" element={<ProtectedRoute><VideoGrid /></ProtectedRoute>} />
                     <Route path="/video/:id" element={<VideoPlayer />} />
+                    <Route path="/channel/:userId" element={<ChannelPage />} />
+                    <Route path="/upload" element={<ProtectedRoute><UploadVideo /></ProtectedRoute>} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

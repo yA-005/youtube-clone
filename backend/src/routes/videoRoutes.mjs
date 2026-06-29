@@ -7,11 +7,17 @@ import { auth } from '../middleware/auth.mjs';
 
 const router = express.Router();
 
-// GET all videos (public) – with optional category filter
+// GET all videos (public) – with optional category and search filters
 router.get('/', async (req, res) => {
     try {
-        const { category } = req.query;
-        const filter = category && category !== 'all' ? { category } : {};
+        const { category, search } = req.query;
+        let filter = {};
+        if (category && category !== 'all') {
+            filter.category = category;
+        }
+        if (search) {
+            filter.title = { $regex: search, $options: 'i' }; // case-insensitive
+        }
         const videos = await Video.find(filter)
             .populate('channelId', 'channelName')
             .sort({ uploadDate: -1 });

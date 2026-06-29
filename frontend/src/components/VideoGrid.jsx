@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
 
-function VideoGrid() {
+function VideoGrid({ search = '' }) {
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const res = await api.get('/videos');
+                const res = await api.get('/videos', { params: { search } });
                 setVideos(res.data);
             } catch (err) {
                 console.error(err);
@@ -20,7 +20,7 @@ function VideoGrid() {
             }
         };
         fetchVideos();
-    }, []);
+    }, [search]);
 
     if (loading) return <div>Loading videos...</div>;
 
@@ -38,6 +38,7 @@ function VideoGrid() {
                     </div>
                 </div>
             ))}
+            {videos.length === 0 && <p>No videos found.</p>}
         </div>
     );
 }
