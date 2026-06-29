@@ -28,7 +28,6 @@ router.get('/:id', async (req, res) => {
             .populate('channelId', 'channelName')
             .populate('uploader', 'username');
         if (!video) return res.status(404).json({ message: 'Video not found' });
-        // Increment views
         video.views += 1;
         await video.save();
         res.json(video);
@@ -44,7 +43,6 @@ router.post('/', auth, async (req, res) => {
         if (!title || !thumbnailUrl || !videoUrl || !category) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
-        // Find the user's channel
         const channel = await Channel.findOne({ owner: req.user.userId });
         if (!channel) {
             return res.status(404).json({ message: 'You must create a channel first' });
@@ -59,7 +57,6 @@ router.post('/', auth, async (req, res) => {
             uploader: req.user.userId
         });
         await video.save();
-        // Add video to channel's videos array
         channel.videos.push(video._id);
         await channel.save();
         res.status(201).json(video);
@@ -74,7 +71,6 @@ router.put('/:id', auth, async (req, res) => {
         const { title, description, thumbnailUrl, videoUrl, category } = req.body;
         const video = await Video.findById(req.params.id);
         if (!video) return res.status(404).json({ message: 'Video not found' });
-        // Check ownership: video.uploader should match req.user.userId
         if (video.uploader.toString() !== req.user.userId) {
             return res.status(403).json({ message: 'You are not the owner of this video' });
         }
@@ -98,13 +94,48 @@ router.delete('/:id', auth, async (req, res) => {
         if (video.uploader.toString() !== req.user.userId) {
             return res.status(403).json({ message: 'You are not the owner of this video' });
         }
-        // Remove video from channel's videos array
         await Channel.updateOne(
             { _id: video.channelId },
             { $pull: { videos: video._id } }
         );
         await video.deleteOne();
         res.json({ message: 'Video deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// POST /api/videos/:id/like – toggle like
+router.post('/:id/like', auth, async (req, res) => {
+    try {
+        const video = await Video.findById(req.params.id);
+        if (!video) return res.status(404).json({ message: 'Video not found' });
+        const { action } = req.body;
+        if (action === 'like') {
+            video.likes += 1;
+        } else if (action === 'unlike') {
+            video.likes = Math.max(0, video.likes - 1);
+        }
+        await video.save();
+        res.json({ likes: video.likes, dislikes: video.dislikes });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// POST /api/videos/:id/dislike – toggle dislike
+router.post('/:id/dislike', auth, async (req, res) => {
+    try {
+        const video = await Video.findById(req.params.id);
+        if (!video) return res.status(404).json({ message: 'Video not found' });
+        const { action } = req.body;
+        if (action === 'dislike') {
+            video.dislikes += 1;
+        } else if (action === 'undislike') {
+            video.dislikes = Math.max(0, video.dislikes - 1);
+        }
+        await video.save();
+        res.json({ likes: video.likes, dislikes: video.dislikes });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
