@@ -1,6 +1,6 @@
 
 
-/* Base styles (desktop) */
+/* ===== Global Reset & Base ===== */
 * {
     margin: 0;
     padding: 0;
@@ -10,9 +10,10 @@
 body {
     font-family: 'Roboto', Arial, sans-serif;
     background-color: #f9f9f9;
+    color: #030303;
 }
 
-/* Header */
+/* ===== Header ===== */
 header {
     display: flex;
     align-items: center;
@@ -35,7 +36,6 @@ header h1 a {
     text-decoration: none;
 }
 
-/* Search bar */
 header form {
     display: flex;
     flex: 1;
@@ -48,6 +48,8 @@ header form input {
     padding: 0.4rem 0.6rem;
     border: 1px solid #ccc;
     border-radius: 2px 0 0 2px;
+    background: #fff;
+    color: #030303;
 }
 
 header form button {
@@ -57,49 +59,24 @@ header form button {
     border-left: none;
     border-radius: 0 2px 2px 0;
     cursor: pointer;
+    color: #030303;
 }
 
-/* Video grid */
-.video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem;
+header .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.video-card {
-    background: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    transition: transform 0.2s;
+header .user-info button {
+    background: none;
+    border: none;
     cursor: pointer;
+    color: #030303;
+    font-weight: 500;
 }
 
-.video-card:hover {
-    transform: scale(1.02);
-}
-
-.video-card img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-}
-
-.video-card h4 {
-    font-size: 0.95rem;
-    margin: 0.5rem 0 0.2rem;
-    padding: 0 0.5rem;
-}
-
-.video-card p {
-    font-size: 0.8rem;
-    color: #606060;
-    padding: 0 0.5rem 0.5rem;
-    margin: 0;
-}
-
-/* Sidebar – hidden by default on mobile, toggled */
+/* ===== Sidebar ===== */
 .sidebar {
     position: fixed;
     top: 56px;
@@ -127,9 +104,191 @@ header form button {
 .sidebar ul li {
     padding: 0.6rem 0;
     border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
 }
 
-/* Responsive */
+/* ===== Video Grid ===== */
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.video-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.video-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.video-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.video-card .card-body {
+    padding: 0.5rem;
+}
+
+.video-card h4 {
+    font-size: 0.95rem;
+    margin: 0 0 0.2rem 0;
+    color: #030303;
+}
+
+.video-card p {
+    font-size: 0.8rem;
+    color: #606060;
+    margin: 0.2rem 0;
+}
+
+/* ===== Loading Spinner ===== */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== Category Filter ===== */
+.category-filter {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 1rem 1.5rem;
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.category-filter button {
+    padding: 0.4rem 1rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    background: #e9ecef;
+    color: #030303;
+    transition: background 0.2s;
+}
+
+.category-filter button.active {
+    background: #007bff;
+    color: #fff;
+}
+
+.category-filter button:hover {
+    background: #d0d4d8;
+}
+
+.category-filter .clear {
+    background: #dc3545;
+    color: #fff;
+}
+
+.category-filter .clear:hover {
+    background: #b02a37;
+}
+
+/* ===== Video Player ===== */
+.video-player {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.video-player video {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.video-player h1 {
+    font-size: 1.8rem;
+    margin: 1rem 0 0.5rem;
+}
+
+.video-player .meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0.5rem 0;
+}
+
+.video-player .actions {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.video-player .actions button {
+    padding: 0.4rem 1rem;
+    border: none;
+    border-radius: 20px;
+    background: #e9ecef;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* ===== Comments ===== */
+.comment-section {
+    margin-top: 2rem;
+}
+
+.comment {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 0.8rem 0;
+}
+
+.comment strong {
+    display: block;
+    font-size: 0.9rem;
+}
+
+.comment p {
+    margin: 0.2rem 0;
+}
+
+.comment .comment-actions {
+    margin-top: 0.3rem;
+}
+
+.comment .comment-actions button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+}
+
+.comment .comment-actions .delete {
+    color: #dc3545;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
     .video-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -144,6 +303,11 @@ header form button {
     }
     .sidebar {
         width: 200px;
+        top: 50px;
+        height: calc(100vh - 50px);
+    }
+    .video-player h1 {
+        font-size: 1.4rem;
     }
 }
 
@@ -157,5 +321,13 @@ header form button {
     }
     header h1 {
         font-size: 0.9rem;
+    }
+    .category-filter {
+        padding: 0.5rem;
+        gap: 0.3rem;
+    }
+    .category-filter button {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.7rem;
     }
 }
