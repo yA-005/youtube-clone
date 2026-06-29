@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home'; 
 import UploadVideo from './components/UploadVideo';
+import VideoGrid from './components/VideoGrid';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/upload" element={<ProtectedRoute><UploadVideo /></ProtectedRoute>} />
+                    <Route path="/" element={<ProtectedRoute><VideoGrid /></ProtectedRoute>} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
