@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
-import CommentList from './CommentList';  // <-- add this import
+import CommentList from './CommentList';
+import CommentForm from './CommentForm';
 
 function VideoPlayer() {
     const { id } = useParams();
@@ -13,24 +14,35 @@ function VideoPlayer() {
     const [loading, setLoading] = useState(true);
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
-    const [userLike, setUserLike] = useState(null);
+    const [userLike, setUserLike] = useState(null); // 'like' or 'dislike' or null
+    const [comments, setComments] = useState([]);
 
+    // Fetch video details and comments
     useEffect(() => {
-        const fetchVideo = async () => {
+        const fetchData = async () => {
             try {
-                const res = await api.get(`/videos/${id}`);
-                setVideo(res.data);
-                setLikes(res.data.likes);
-                setDislikes(res.data.dislikes);
+                const videoRes = await api.get(`/videos/${id}`);
+                setVideo(videoRes.data);
+                setLikes(videoRes.data.likes);
+                setDislikes(videoRes.data.dislikes);
+
+                const commentsRes = await api.get(`/comments/video/${id}`);
+                setComments(commentsRes.data);
             } catch (err) {
                 console.error(err);
             } finally {
                 setLoading(false);
             }
         };
-        fetchVideo();
+        fetchData();
     }, [id]);
 
+    // Add a new comment to the top of the list
+    const addComment = (newComment) => {
+        setComments(prev => [newComment, ...prev]);
+    };
+
+    // Like handler
     const handleLike = async () => {
         if (!user) {
             alert('Please login to like');
@@ -46,6 +58,7 @@ function VideoPlayer() {
         }
     };
 
+    // Dislike handler
     const handleDislike = async () => {
         if (!user) {
             alert('Please login to dislike');
@@ -82,9 +95,10 @@ function VideoPlayer() {
 
             <p>Views: {video.views}</p>
 
-            {/* Add the CommentList component here */}
+            {/* Comments section */}
             <div style={{ marginTop: '2rem' }}>
-                <CommentList videoId={id} />
+                <CommentForm videoId={id} onCommentAdded={addComment} />
+                <CommentList videoId={id} comments={comments} setComments={setComments} />
             </div>
         </div>
     );

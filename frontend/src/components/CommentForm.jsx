@@ -47,4 +47,4 @@ function CommentForm({ videoId, onCommentAdded }) {
     );
 }
 
-export default CommentForm; 
+export default CommentForm;
