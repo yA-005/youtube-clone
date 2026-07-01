@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
-import LoadingSpinner from './LoadingSpinner'; // import the spinner
+import LoadingSpinner from './LoadingSpinner';
 
 function VideoGrid({ search = '', category = 'all' }) {
     const [videos, setVideos] = useState([]);
@@ -23,24 +23,17 @@ function VideoGrid({ search = '', category = 'all' }) {
         fetchVideos();
     }, [search, category]);
 
-    // If loading, show spinner
-    if (loading) {
-        return <LoadingSpinner />;
-    }
-
-    // If no videos found
-    if (videos.length === 0) {
-        return <p style={{ textAlign: 'center', padding: '2rem' }}>No videos found.</p>;
-    }
+    if (loading) return <LoadingSpinner />;
+    if (videos.length === 0) return <p style={{ textAlign: 'center', padding: '2rem' }}>No videos found.</p>;
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem', padding: '1rem' }}>
+        <div className="video-grid">
             {videos.map(video => (
-                <div key={video._id} style={{ border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
+                <div key={video._id} className="video-card">
                     <Link to={`/video/${video._id}`}>
-                        <img src={video.thumbnailUrl} alt={video.title} style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
+                        <img src={video.thumbnailUrl} alt={video.title} />
                     </Link>
-                    <div style={{ padding: '0.5rem' }}>
+                    <div className="card-body">
                         <h4>{video.title}</h4>
                         <p>{video.channelId?.channelName || 'Unknown Channel'}</p>
                         <p>{video.views} views</p>

@@ -40,10 +40,13 @@ function CommentList({ videoId, comments, setComments }) {
         }
     };
 
+    if (comments.length === 0) return <p>No comments yet.</p>;
+
     return (
         <div>
+            <h3>Comments ({comments.length})</h3>
             {comments.map(comment => (
-                <div key={comment._id} style={{ borderBottom: '1px solid #eee', padding: '0.5rem 0' }}>
+                <div key={comment._id} className="comment">
                     <strong>{comment.userId?.username || 'Unknown User'}</strong>
                     {editingId === comment._id ? (
                         <div>
@@ -51,6 +54,7 @@ function CommentList({ videoId, comments, setComments }) {
                                 value={editText}
                                 onChange={(e) => setEditText(e.target.value)}
                                 rows="2"
+                                style={{ width: '100%' }}
                             />
                             <button onClick={() => saveEdit(comment._id)}>Save</button>
                             <button onClick={cancelEdit}>Cancel</button>
@@ -60,9 +64,9 @@ function CommentList({ videoId, comments, setComments }) {
                     )}
                     <small>{new Date(comment.timestamp).toLocaleString()}</small>
                     {user && comment.userId && comment.userId._id === user.id && (
-                        <div>
+                        <div className="comment-actions">
                             <button onClick={() => startEdit(comment)}>Edit</button>
-                            <button onClick={() => handleDelete(comment._id)} style={{ backgroundColor: 'red', color: 'white' }}>Delete</button>
+                            <button onClick={() => handleDelete(comment._id)} className="delete">Delete</button>
                         </div>
                     )}
                 </div>

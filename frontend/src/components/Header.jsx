@@ -21,7 +21,7 @@ function Header({ toggleSidebar }) {
     return (
         <header>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <button onClick={toggleSidebar} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', marginRight: '0.5rem' }}>
+                <button onClick={toggleSidebar} className="hamburger" style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', marginRight: '0.5rem' }}>
                     ☰
                 </button>
                 <h1><Link to="/">YouTube Clone</Link></h1>
@@ -30,9 +30,12 @@ function Header({ toggleSidebar }) {
                 <input type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                 <button type="submit">Search</button>
             </form>
-            <div>
+            <div className="user-info">
                 {user ? (
-                    <span>{user.username} <button onClick={logout}>Logout</button></span>
+                    <>
+                        <span>{user.username}</span>
+                        <button onClick={logout}>Logout</button>
+                    </>
                 ) : (
                     <button onClick={() => navigate('/login')}>Sign In</button>
                 )}
